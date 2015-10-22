@@ -1,0 +1,229 @@
+package MahaanPackage;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class TripSheet {
+	
+
+	
+	
+	int skm,ekm,exkm,extm,utm,ukm,kmc,tmc,extmc,exkmc;
+	static int time;
+	
+	
+	
+	
+	public TripSheet()
+	{
+		skm=0;
+		ekm=0;
+		exkm=0;
+		extm=0;
+		tmc=0;
+		utm=0;
+		ukm=0;
+		extmc=0;
+		exkmc=0;
+	}
+	
+
+	public int getSkm() {
+		return skm;
+	}
+
+	public int getEkm() {
+		return ekm;
+	}
+
+	
+
+	public int getExkm() {
+		return exkm;
+	}
+
+	public int getExtm() {
+		return extm;
+	}
+
+	public int getUtm() {
+		return utm;
+	}
+
+	public int getUkm() {
+		return ukm;
+	}
+	
+	
+	public int getTmc() {
+		return tmc;
+	}
+
+	public int getKmc() {
+		return kmc;
+	}
+
+	public int getExtmc() {
+		return extmc;
+	}
+
+
+	public int getExkmc() {
+		return exkmc;
+	}
+
+	public static int calcTm(String s, String e)
+	{
+		// calculating the duration
+				
+				
+				String startDate=s;
+				
+				
+				String endDate=e;
+				System.out.println(startDate + "-" +endDate);
+				SimpleDateFormat f1=new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+				Date d1=null;
+				Date d2=null;
+				
+				try{
+					d1=f1.parse(startDate);
+					d2=f1.parse(endDate);
+					
+					long diff=d2.getTime()-d1.getTime();
+					
+					long diffMinnutes=diff/(60*1000)%60;
+					long diffHours=diff/(1000*60*60)%24;
+					long diffDays=diff/(1000*60*60*24);
+					System.out.println(diffDays+" Days,"+diffHours+" Hours, "+diffMinnutes+"Minutes");
+					long time=diffHours+(diffDays*24);
+					return (int) time;
+				}
+				catch (Exception e1) {
+					System.out.println("Invalid Input!");
+					System.exit(0);
+				}
+				return time;
+				
+				// End of time calculation
+	}
+
+	public int calcKm(int ut)
+	{
+		
+		TripSheet u1=new TripSheet();
+		u1.utm=ut;
+		if(ut<=4)
+			
+		{
+			
+			System.out.println("Used time is : " +u1.getUtm());
+			
+			System.out.println("Fout hours fourty km package = 700 Rs");
+			
+			
+			u1.ukm=ekm-skm;
+			System.out.println("Used KM is : " +u1.getUkm());
+			
+			if(u1.getUkm()>40)
+				u1.exkm=u1.ukm - 40;
+			System.out.println("Extra KM is : " +u1.getExkm());
+			u1.exkmc=u1.exkm*8;
+			System.out.println("Extra KM chrge is : " +u1.getExkmc());
+			u1.kmc=700+u1.exkmc;
+			
+			System.out.println("Total Charge is : " +u1.getKmc());
+			return u1.kmc;
+			
+			
+			
+		}
+		 else
+		{
+			System.out.println("Eight hours eighty km package  = 1,400 Rs");
+			
+			u1.ukm=ekm-skm;
+			System.out.println("Used KM is : " +u1.getUkm());
+			
+			if(u1.getUkm()>80) {
+				u1.exkm=u1.ukm-80;
+				u1.exkmc=u1.exkm*8;
+				System.out.println("Extra KM is : " +u1.getExkm());
+				System.out.println("Extra KM chrge is : " +u1.getExkmc());
+				u1.kmc=exkmc;
+			
+			}
+			
+			
+			
+			if(ut>8)
+			{
+				System.out.println("Used time is : " +u1.getUtm());
+				u1.extm=u1.utm-8;
+				u1.extmc=u1.extm*100;
+	
+				System.out.println("Extra Extra time used is : " +u1.getExtm());
+				System.out.println("Extra Extra time charges is : " +u1.getExtmc());
+				u1.kmc=u1.kmc+u1.extmc;
+			}
+			
+			return u1.kmc+1400; 
+			
+			
+			
+		}
+		
+		
+	}
+	
+	public static void main(String[] args) {
+		
+		
+		
+		TripSheet c1=new TripSheet();
+		
+		//file parsing
+		String fileName="/home/vinod/Desktop/data",aline,delimiter=",";
+		BufferedReader br = null;
+		try {
+			br = new BufferedReader(new FileReader(fileName));
+		} catch (FileNotFoundException e) {
+			System.out.println("File not found!");
+			e.printStackTrace();
+		}
+		try {
+			br.readLine();
+			while ((aline=br.readLine())!=null)
+			{
+
+			String[] temp=aline.split(delimiter);
+			c1.skm=Integer.parseInt(temp[0]);
+			c1.ekm=Integer.parseInt(temp[1]);
+			c1.utm=TripSheet.calcTm(temp[2],temp[3]);
+		
+			
+			System.out.println(c1.utm);
+			System.out.println("Total charge is : "+ c1.calcKm(c1.utm));
+			
+			
+			}
+		} catch (IOException e) {
+			System.out.println("Unable to read the file!");
+			e.printStackTrace();
+		}
+		
+		//end of file parsing
+		
+		
+		
+	
+		
+	}
+
+	
+
+}
