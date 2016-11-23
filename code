@@ -78,7 +78,7 @@ public class TripSheet {
 
 	public static int calcTm(String s, String e)
 	{
-		// calculating the duration
+		// calculating the duration --this part is just to check workflow of the git
 				
 				
 				String startDate=s;
